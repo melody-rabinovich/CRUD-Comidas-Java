@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.crud.comidas.dto.ApiResponse;
 
@@ -36,6 +37,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
 
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiResponse<Void>> handleEnumError(
+            MethodArgumentTypeMismatchException ex
+    ) {
+        ApiResponse<Void> response = new ApiResponse<>(
+            HttpStatus.BAD_REQUEST.value(),
+            "Categoría inválida. Valores permitidos: PLATO, BEBIDA, POSTRE",
+            null
+        );
+
+        return ResponseEntity.badRequest().body(response);
+    }
+
 
     @ExceptionHandler(Exception.class) // cualquiera sea la excepcion. Osea, si hay una excepción sin handler específico, entra acá
     public ResponseEntity<ApiResponse<Void>> handleGeneric (Exception exception){

@@ -41,22 +41,23 @@ public class ComidaModel {
     private Categoria categoria;
 
     @NotNull
-    @Column(name="esVegano")
+    @Column(name="es_vegano")
     private boolean esVegano;
 
     @NotNull
-    @Column(name="esVegetariano")
+    @Column(name="es_vegetariano")
     private boolean esVegetariano;
 
     @NotNull
-    @Column(name="esSinTacc")
+    @Column(name="es_sin_tacc")
     private boolean esSinTacc;
 
     public ComidaModel(){
 
     }
 
-    public ComidaModel(String nombre, double precio, Categoria categoria, boolean esVegano, boolean esVegetariano, boolean esSinTacc){
+    public ComidaModel(long id, String nombre, double precio, Categoria categoria, boolean esVegano, boolean esVegetariano, boolean esSinTacc){
+        setId(id);
         setNombre(nombre);
         setPrecio(precio);
         setCategoria(categoria);
@@ -72,7 +73,8 @@ public class ComidaModel {
         this.nombre = nombre.toUpperCase().trim();
     }
 
-
+    public void setId(long id) { this.id = id;}
+    public long getId(){return this.id;}
     public void setNombre(String nombre){this.nombre = nombre;    }
     public String getNombre(){return this.nombre;}
     public void setPrecio(double precio){ this.precio = precio;}

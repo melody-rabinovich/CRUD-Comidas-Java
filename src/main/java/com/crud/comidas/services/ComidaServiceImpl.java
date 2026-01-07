@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.crud.comidas.enums.Categoria;
+import com.crud.comidas.exceptions.ResourceNotFoundException;
 import com.crud.comidas.models.ComidaModel;
 import com.crud.comidas.repositories.ComidaRepository;
 
@@ -21,15 +23,26 @@ public class ComidaServiceImpl implements ComidaService{
 
     @Override
     public List<ComidaModel> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return comidaRepository.findAll();
     }
 
     @Override
-    public Optional<ComidaModel> findById(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    public ComidaModel findById(long id) {
+       return comidaRepository.findById(id).
+        orElseThrow(() -> new ResourceNotFoundException("No se encontró una comida con el id " + id));
     }
+
+    @Override
+    public List<ComidaModel> findByCategoria(Categoria categoria) {
+        List<ComidaModel> comidasEncontradas = comidaRepository.findByCategoria(categoria);
+
+        if(comidasEncontradas.isEmpty()){
+            throw new ResourceNotFoundException("No se econtraron comidas con la categoría <" + categoria + ">");
+        }
+
+        return comidasEncontradas;
+    }
+
 
     @Override
     public Optional<ComidaModel> save(ComidaModel comidaModel) {
@@ -48,5 +61,10 @@ public class ComidaServiceImpl implements ComidaService{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
+
+    
+
+    // Metodos de lógica de negocio
+    // hacer un método que valide que si una comida es vegana, sea también vegetariana
 
 }
