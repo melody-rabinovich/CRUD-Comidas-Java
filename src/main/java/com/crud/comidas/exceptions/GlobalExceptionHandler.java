@@ -1,9 +1,13 @@
 package com.crud.comidas.exceptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -39,9 +43,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiResponse<Void>> handleEnumError(
-            MethodArgumentTypeMismatchException ex
-    ) {
+    public ResponseEntity<ApiResponse<Void>> handleEnumError(MethodArgumentTypeMismatchException exception) {
         ApiResponse<Void> response = new ApiResponse<>(
             HttpStatus.BAD_REQUEST.value(),
             "Categoría inválida. Valores permitidos: PLATO, BEBIDA, POSTRE",
@@ -49,6 +51,19 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.badRequest().body(response);
+    }
+                      
+    @ExceptionHandler(MethodArgumentNotValidException.class) //Excepción que tira spring al validar con Bean
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(MethodArgumentNotValidException exception){
+        Map<String, String> errors = new HashMap<>();
+        
+        exception.getBindingResult().getFieldErrors()
+                    .forEach(error -> {
+                        errors.put(error.getField(),error.getDefaultMessage());
+                    });
+
+        return ResponseEntity.badRequest().body(new ApiResponse<Map<String, String>>(HttpStatus.BAD_REQUEST.value(),"datos inválidos:",errors));
+        
     }
 
 
