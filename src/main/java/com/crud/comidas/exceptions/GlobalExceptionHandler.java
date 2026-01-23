@@ -1,5 +1,6 @@
 package com.crud.comidas.exceptions;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,12 +44,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiResponse<Void>> handleEnumError(MethodArgumentTypeMismatchException exception) {
+    public ResponseEntity<ApiResponse<Void>> handleTypeMismatch(MethodArgumentTypeMismatchException exception) {
+        
+        String mensaje;
+
+        if (exception.getRequiredType().isEnum()) {
+            mensaje = "Valor inválido. Valores permitidos: " +
+                    Arrays.toString(exception.getRequiredType().getEnumConstants());
+        } else {
+            mensaje = "Parámetro inválido: " + exception.getName();
+        }
+
         ApiResponse<Void> response = new ApiResponse<>(
             HttpStatus.BAD_REQUEST.value(),
-            "Categoría inválida. Valores permitidos: PLATO, BEBIDA, POSTRE",
+            mensaje,
             null
         );
+
 
         return ResponseEntity.badRequest().body(response);
     }

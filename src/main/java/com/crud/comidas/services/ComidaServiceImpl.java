@@ -55,9 +55,9 @@ public class ComidaServiceImpl implements ComidaService{
     }
 
     @Override
-    public Optional<ComidaModel> deleteById(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    public void deleteById(long id) {
+        findById(id);
+        comidaRepository.deleteById(id);
     }
 
     @Override

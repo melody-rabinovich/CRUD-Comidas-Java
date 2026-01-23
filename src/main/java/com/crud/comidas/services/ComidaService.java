@@ -10,7 +10,7 @@ public interface ComidaService {
     List<ComidaModel> findAll();
     ComidaModel findById(long id);
     ComidaModel save(ComidaModel comidaModel);
-    Optional<ComidaModel> deleteById(long id);
+    void deleteById(long id);
     Optional<ComidaModel> update(long id, ComidaModel comidaModel);
     // filtros
     List<ComidaModel> findByCategoria(Categoria categoria);

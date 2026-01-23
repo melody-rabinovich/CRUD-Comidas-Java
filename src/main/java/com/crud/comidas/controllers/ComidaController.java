@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,12 @@ public class ComidaController {
     public ResponseEntity<ApiResponse<ComidaModel>> save(@Valid @RequestBody ComidaModel comidaNueva){
         ComidaModel comidaCreada = comidaService.save(comidaNueva);
         return ResponseEntity.ok(new ApiResponse<>(201, "Comida Creada:", comidaCreada));
+    }
+
+    @DeleteMapping ("/borrar/{id}")
+    public ResponseEntity<ApiResponse<ComidaModel>> deleteById(@PathVariable @Min(1) long id){
+        comidaService.deleteById(id);
+        return ResponseEntity.ok(new ApiResponse<>(200, "comida eliminada con éxito", null));
     }
 
 
